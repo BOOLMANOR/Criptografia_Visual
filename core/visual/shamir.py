@@ -21,8 +21,8 @@ def cipher(imgI, imgo):
 				encode(0,np.random.randint(0,3),s1,s2,x*tm,y*tm)
 			else:	#pixel Negro
 				encode(1,np.random.randint(0,3),s1,s2,x*tm,y*tm)
-	imagen.guardar(s1,"temp/Sombra1.jpg")
-	imagen.guardar(s2,"temp/Sombra2.jpg")
+	imagen.guardar(s1,"Sombra1.jpg")
+	imagen.guardar(s2,"Sombra2.jpg")
 	#print "salidaaaaaa"
 
 def decipher(imgI, imgo):
@@ -42,37 +42,43 @@ def decipher(imgI, imgo):
 	imagen.guardar(ds,"Descifrada.jpg")
 
 #funciones adicionales del CIPHER ------------------------------ #
-def equivalente(s): #2x2
-	if (s==0):
-		a=[[[255,255,255],[0,0,0]],[[0,0,0],[255,255,255]]]
-	elif (s==1):
-		a=[[[255,255,255],[0,0,0]],[[255,255,255],[0,0,0]]]
+def transpuesta(opt): #2x2
+	if (opt == 0):
+		tr = [ [[255,255,255],[0,0,0]], # BW
+		      [[0,0,0],[255,255,255]] ] # WB
+	elif (opt == 1):
+		tr = [ [[255,255,255],[0,0,0]], # BW
+			  [[255,255,255],[0,0,0]] ] # BW
 	else:
-		a=[[[255,255,255],[255,255,255]],[[0,0,0],[0,0,0]]]
-	return a
+		tr = [ [[255,255,255],[255,255,255]], # BB
+			   [[0,0,0],[0,0,0]] ] 			  # WW
+	return tr
 
-def basicas(s): #2x2
-	if (s==0):
-		a=[[[0,0,0],[255,255,255]],[[255,255,255],[0,0,0]]]
-	elif (s==1):
-		a=[[[0,0,0],[255,255,255]],[[0,0,0],[255,255,255]]]
+def basica(opt): #2x2
+	if (opt == 0):
+		tr = [ [[0,0,0],[255,255,255]],  # WB
+			   [[255,255,255],[0,0,0]] ] # BW
+	elif (opt == 1):
+		tr = [ [[0,0,0],[255,255,255]],  # WB
+			   [[0,0,0],[255,255,255]] ] # WB
 	else:
-		a=[[[0,0,0],[0,0,0]],[[255,255,255],[255,255,255]]]
-	return a
+		tr = [ [[0,0,0],[0,0,0]],   			# WW
+			   [[255,255,255],[255,255,255]] ]  # BB
+	return tr
 
 def encode(n, sombra, imag1, imag2,i,j):
 	temp = np.random.randint(0,2)	#hacemos aleatorio la sombra blanca y negra
-	if(n==0):
+	if(n == 0):
 		#temp2 = np.random.randint(0,3)
-		if(temp==0):	#ampliamos de 3 a 6 matrices basicas
-			s1,s2 = basicas(sombra),basicas(sombra)
+		if(temp == 0):	#ampliamos de 3 a 6 matrices basicas
+			s1,s2 = basica(sombra),basica(sombra)
 		else:
-			s1,s2 = equivalente(sombra),equivalente(sombra)
+			s1,s2 = transpuesta(sombra),transpuesta(sombra)
 	else:
-		if(temp==0):	#intercambiamos sombras
-			s1,s2 = basicas(sombra),equivalente(sombra)
+		if(temp == 0):	#intercambiamos sombras
+			s1,s2 = basica(sombra),transpuesta(sombra)
 		else:
-			s2,s1 = basicas(sombra),equivalente(sombra)
+			s2,s1 = basica(sombra),transpuesta(sombra)
 	#guardamos en primera sombra
 	imag1[i][j] = s1[0][0]
 	imag1[i][j+1] = s1[0][1]

@@ -6,7 +6,7 @@ from core.stego import *
 
 def main(arg):
 	if(arg.output == None):
-		arg.output = "salida.png"
+		arg.output = "salida.jpg"
 
 	#VISUAL TECNIQUES
 	if arg.tec == '0': 	#shamir
